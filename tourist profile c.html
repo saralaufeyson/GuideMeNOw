@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tour App - User Profile</title>
+    <link rel="stylesheet" href="tourist profile-c.css">
+</head>
+<body>
+    <header class="header">
+        <h1>hey tousirst-lets set up your profile</h1>
+    </header>
+    
+    <div class="profile-container">
+        <form id="profile-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" name="mobile" required pattern="[0-9]{10}">
+
+            <label for="aadhar">Aadhar ID:</label>
+            <input type="text" id="aadhar" name="aadhar" required pattern="[0-9]{12}">
+            
+            <button type="submit">Save Profile</button>
+        </form>
+    </div>
+</body>
+</html>

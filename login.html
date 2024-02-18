@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="script.js"></script>
+</head>
+<body>
+  
+
+
+<div class="wrapper">
+  <div class="title-text">
+    <div class="title login">Login as </div>
+   <div class="title signup">Signup now</div>
+  </div>
+  <div class="form-container">
+    <div class="slide-controls">
+     
+      <input type="radio" name="slide" id="login" checked>
+      <input type="radio" name="slide" id="signup">
+      <label for="login" class="slide login">tourist</label>
+      <label for="signup" class="slide signup">guide</label>
+      <div class="slider-tab"></div>
+    </div>
+    <div class="form-inner">
+     
+      <button onclick="redirectToPage()" class="butto">go to login</button>
+      
+    
+      <script>
+        function redirectToPage() {
+          if (document.getElementById('login').checked) {
+            location.href = 'login-tourist.html';
+          } else if (document.getElementById('signup').checked) {
+            location.href = 'login-guide.html';
+          }
+        }
+      </script>
+    </div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+
+
+  
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+
+  <title>CodePen - Animated Search Form With Micro Interactions | #1</title>
+
+    <link rel="canonical" href="https://codepen.io/himalayasingh/pen/NLmeyJ">
+  
+  
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css'>
+  
+<style>
+* {
+  outline: none;
+}
+
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+body,
+input {
+  cursor: url(http://k003.kiwi6.com/hotlink/vp054ir5gt/c1.png) 32 32, auto;
+  cursor: -webkit-image-set(url(http://k003.kiwi6.com/hotlink/vp054ir5gt/c1.png) 1x,url(http://k003.kiwi6.com/hotlink/z6fy599487/c2.png) 2x) 32 32, auto;
+}
+
+body:active,
+input:active {
+  cursor: url(http://k003.kiwi6.com/hotlink/3p6w4icbzt/c1a.png) 32 32, auto;
+  cursor: -webkit-image-set( url(http://k003.kiwi6.com/hotlink/3p6w4icbzt/c1a.png) 1x, url(http://k003.kiwi6.com/hotlink/6ma7828al1/c2a.png) 2x ) 32 32, auto;
+}
+
+#app-cover {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  width: 434px;
+  margin: -41px auto 0 auto;
+}
+
+#app {
+  position: relative;
+  width: 82px;
+  height: 82px;
+  border-radius: 120px;
+  margin: 0 auto;
+  transition: 0.15s ease width;
+  z-index: 2;
+}
+
+form {
+  position: relative;
+  height: 82px;
+  cursor: auto;
+  border-radius: 120px;
+}
+
+#f-element {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: 120px;
+}
+
+#inp-cover {
+  position: absolute;
+  top: 0;
+  right: 41px;
+  bottom: 0;
+  left: 0;
+  padding: 0 35px;
+  background-color: #fff;
+}
+
+input {
+  display: block;
+  width: 100%;
+  font-size: 19px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #48B8AC;
+  border: 0;
+  padding: 30px 0;
+  margin: 0;
+  margin-top: 52px;
+  line-height: 1;
+  background-color: transparent;
+  transition: 0.15s ease margin-top;
+  cursor: auto;
+}
+
+button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 82px;
+  height: 82px;
+  color: #fff;
+  font-size: 30px;
+  line-height: 1;
+  padding: 26px;
+  margin: 0;
+  border: 0;
+  background-color: #48B8AC;
+  transition: 0.2s ease background-color;
+  border-radius: 50%;
+}
+
+button.shadow {
+  box-shadow: 0 10px 30px #d0d0d0;
+}
+
+button i.fas {
+  display: block;
+  line-height: 1;
+}
+
+#layer {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: #48B8AC;
+  transition: 0.9s ease all;
+  z-index: 1;
+}
+
+#layer.sl {
+  transition: 0.3s ease all;
+}
+
+#layer,
+#init {
+  position: fixed;
+  top: 50%;
+  margin: -40px auto 0 auto;
+}
+
+#layer {
+  right: -100px;
+  left: -100px;
+}
+
+#init {
+  right: 0;
+  left: 0;
+  width: 82px;
+  height: 82px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#app.opened {
+  width: 434px;
+  box-shadow: 0 10px 30px #48B8AC;
+}
+
+.opened input.move-up {
+  margin-top: 0;
+}
+
+.opened button {
+  color: #48B8AC;
+  background-color: #fff;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+#app.opened + #layer {
+  width: 4000px;
+  height: 4000px;
+  margin-top: -2000px;
+  opacity: 1;
+  z-index: 0;
+}
+
+#app.opened ~ #init {
+  z-index: -1;
+}
+</style>
+
+  
+  
+  
+</head>
+
+<body translate="no">
+  <div id="app-cover">
+  <div id="app">
+    <form method="get" action="">
+      <div id="f-element">
+        <div id="inp-cover"><input type="text" name="query" placeholder="search places..." autocomplete="on"></div>
+      </div>
+      <button type="submit" class="shadow"><i class="fas fa-search"></i></button>
+    </form>
+  </div>
+  <div id="layer" title="Click the Green area to hide the form"></div>
+  <div id="init"></div>
+</div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+      <script id="rendered-js" >
+$(function () {
+  var app = $("#app"),
+  init = $("#init"),
+  layer = $("#layer"),
+  input = $("#inp-cover input"),
+  button = $("button");
+
+  function toggleApp() {
+    app.toggleClass("opened");
+
+    if (button.hasClass("shadow")) button.toggleClass("shadow");else
+
+    setTimeout(function () {
+      button.toggleClass("shadow");
+    }, 300);
+
+    if (app.hasClass("opened")) {
+      setTimeout(function () {
+        input.toggleClass("move-up");
+      }, 200);
+      setTimeout(function () {
+        input.focus();
+      }, 500);
+    } else
+    setTimeout(function () {
+      input.toggleClass("move-up").val("");
+    }, 200);
+
+    if (!layer.hasClass("sl")) {
+      setTimeout(function () {
+        layer.addClass("sl");
+      }, 800);
+    } else
+    setTimeout(function () {
+      layer.removeClass("sl");
+    }, 300);
+  }
+
+  layer.on("click", toggleApp);
+  init.on("click", toggleApp);
+});
+//# sourceURL=pen.js
+    </script>
+
+  
+  <script src="https://cpwebassets.codepen.io/assets/editor/iframe/iframeRefreshCSS-44fe83e49b63affec96918c9af88c0d80b209a862cf87ac46bc933074b8c557d.js"></script>
+</body>
+
+</html>

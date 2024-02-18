@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+
+
+  
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+
+  <title>CodePen - Calendar reservation</title>
+
+    <link rel="canonical" href="https://codepen.io/efreet/pen/WNZmdev">
+  
+  
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.css'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css'>
+  
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+  font-size: 14px;
+}
+.bold{font-weight:bold;}
+.m-r-5 {margin-right:5px}
+.p-5 {padding: 5px !important}
+.todo {background-color: #f62d51}
+.done {background-color: #ffbc34}
+.check-in {background-color: #39c449}
+
+.day-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    /*border: 1px solid transparent;*/
+    border-radius: 0.25rem;  
+    box-shadow: 0 3px 5px 0 rgb(0 0 0 / 31%);
+    margin: 1rem!important;
+    padding-top: 5px!important;
+}
+
+
+.vertical-border {
+  border-left : 5px solid;
+}
+.border-color-todo {
+  border-color : #f62d51;
+}
+.border-color-done {
+  border-color : #ffbc34;
+}
+.border-color-check-in {
+  border-color : #39c449;
+}
+.bg-clicked {
+  background-color : wheat!important;
+}
+.fc-list-event-graphic {
+  display:none!important;
+}
+.fc-list-event-title {
+  border:0px !important;
+}
+.card-check-in {
+    border: 0;
+    border-top: 5px solid;
+    border-color: #39c449!important;
+}
+.card-done {
+    border: 0;
+    border-top: 5px solid;
+    border-color: #ffbc34!important;
+}
+.card-todo {
+    border: 0;
+    border-top: 5px solid;
+    border-color: #f62d51!important;
+}
+.text {color:#6c757d }
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-top: 5px solid;
+    /*border: 1px solid transparent;*/
+    border-radius: 0.25rem;  
+    box-shadow: 0 3px 5px 0 rgb(0 0 0 / 31%);
+    margin: 5px!important;
+    padding-top: 5px!important;
+}
+.text-white {color: white!important;}
+#calendar {
+  max-width: 1100px;
+  margin: 40px auto;
+}
+</style>
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+</head>
+
+<body translate="no">
+  <div id='calendar'></div>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/moment@5.5.0/main.global.min.js'></script>
+<script src='https://unpkg.com/popper.js/dist/umd/popper.min.js'></script>
+<script src='https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
+      <script id="rendered-js" >
+document.addEventListener('DOMContentLoaded', function () {
+  var calendarEl = document.getElementById('calendar');
+
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    timeZone: 'UTC',
+    locale: 'en', //pour mettre en fr
+    firstDay: 1, //start le lundi
+    themeSystem: 'bootstrap',
+    displayEventTime: false,
+    selectable: true,
+
+    moreLinkClick: function (cellInfo, jsEvent, view) {
+      setTimeout(function () {
+        //console.log($(".fc-more-popover").position().top);
+        //console.log($(".fc-more-popover").height());
+        //console.log($(".fc-view").height());
+        var popH = $(".fc-more-popover").height();
+        var popTop = $(".fc-more-popover").position().top;
+        var calH = $(".fc-view").height();
+        if (popH + popTop > calH) {
+          var newH = $(".fc-view").height() - $(".fc-more-popover").position().top - 10;
+          $(".fc-popover-body").height(newH);
+          $('.fc-popover-body').css({
+            'max-height': newH + 'px',
+            'overflow-x': 'auto' });
+
+          //console.log($(".fc-more-popover").height());
+        }
+      }, 300);
+
+    },
+    customButtons: {
+      addEventButton: {
+        text: 'Add booking',
+        click: function () {
+          alert('Ajax to redirect to the add booking page');
+        } } },
+
+
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'addEventButton dayGridMonth,dayGridWeek,listDay' },
+
+    views: {
+      dayGridMonth: { buttonText: 'Month' },
+      dayGridWeek: { buttonText: 'Week' },
+      listDay: { buttonText: 'Day' } },
+
+    eventTimeFormat: {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false },
+
+    weekNumbers: false,
+    dayMaxEvents: true, // allow "more" link when too many events
+
+    dateClick: function (info) {
+      //alert('clicked ' + info.dateStr);
+      //var view = calendar.view;
+      //alert("The view's type is " + view.type);
+      calendar.changeView('listDay', info.dateStr);
+    },
+    select: function (info) {
+      alert('selected ' + info.startStr + ' to ' + info.endStr);
+    },
+    /*events: 'https://fullcalendar.io/demo-events.json'*/
+    eventClassNames: function (arg) {
+      var view = arg.view;
+      if (view.type != 'listDay') {
+        return ['card card-' + arg.event.extendedProps.status];
+      } else
+
+      return ['day-card vertical-border border-color-' + arg.event.extendedProps.status];
+    },
+    eventClick: function (info) {
+      alert('Event: ' + info.event.title);
+      alert('Event id: ' + info.event.extendedProps.id);
+
+      //alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+      //alert('View: ' + info.view.type);
+      // change the border color just for fun
+      info.el.classList.add('bg-clicked');
+      setTimeout(function () {info.el.classList.remove('bg-clicked');}, 1000);
+    },
+    eventContent: function (arg) {
+
+      var event = arg.event;
+      var view = arg.view;
+      if (view.type == 'listDay') {
+        var customHtml = '';
+        customHtml += "<div><span class='bold'>" + event.title + "</span></div>";
+        if (event.extendedProps.phone) {
+          customHtml += "<div class='p-5 text-secondary'><span ><i class='fa fa-phone m-r-5'></i>" + event.extendedProps.phone + "</span></div>";
+
+        }
+        if (event.extendedProps.email) {
+          customHtml += "<div class='p-5 text-secondary'><span><i class='fa fa-envelope m-r-5'></i>" + event.extendedProps.email + "</span></div>";
+
+        }
+        customHtml += "<div class='p-5'>";
+        event.extendedProps.categories.forEach(cat => {
+          if (cat.count > 0) {
+            customHtml += "<span class='badge bg-secondary text-white m-r-5'>" + cat.name + " " + cat.count + "</span>";
+          }
+        });
+        customHtml += "<div>";
+        return { html: customHtml };
+      } else
+      {
+        var customHtml = '';
+        customHtml += "<div class='text-center'><span class='bold text'>" + event.title + "</span></div>";
+        customHtml += "<div class='p-5 text-center'>";
+        event.extendedProps.categories.forEach(cat => {
+          if (cat.count > 0) {
+            customHtml += "<span class='badge bg-secondary m-r-5'>" + cat.name + " " + cat.count + "</span>";
+          }
+        });
+        customHtml += "<div>";
+        return { html: customHtml };
+      }
+    },
+
+    events: [
+    {
+      title: "Michel",
+      start: moment().add(1, 'days').format(),
+      end: moment().add(1, 'days').add(3, 'hours').format(),
+      className: '',
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 1,
+        status: 'check-in',
+        phone: '0612686462',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 5 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Michel",
+      start: moment().add(2, 'days').format(),
+      end: moment().add(2, 'days').add(3, 'hours').format(),
+      className: '',
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        phone: '0612686462',
+        id: 2,
+        status: 'done',
+        categories: [
+        { name: "vip", count: 0 },
+        { name: "Gold", count: 5 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Michel",
+      start: moment().add(3, 'days').format(),
+      end: moment().add(3, 'days').add(3, 'hours').format(),
+      className: '',
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        phone: '0612686462',
+        id: 3,
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 0 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "John",
+      start: moment().subtract(2, 'days').format(),
+      end: moment().subtract(2, 'days').add(3, 'hours').format(),
+      className: '',
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        phone: '0612686462',
+        id: 4,
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 0 },
+        { name: "Standard", count: 0 }] } },
+
+
+
+    {
+      title: "Tom",
+      start: moment().add(21, 'days').format(),
+      end: moment().add(3, 'hours').format(),
+      className: '',
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        phone: '0612686462',
+        email: 'your@mail.com',
+        id: 5,
+        status: 'check-in',
+        categories: [
+        { name: "vip", count: 8 },
+        { name: "Gold", count: 0 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Tommy",
+      className: '',
+      start: moment().add(21, 'days').format(),
+      end: moment().add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 6,
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 9 },
+        { name: "Gold", count: 2 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Lisbeth",
+      className: '',
+      start: moment().add(21, 'days').format(),
+      end: moment().add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 7,
+        email: 'lili@mail.com',
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 5 },
+        { name: "Gold", count: 4 },
+        { name: "Standard", count: 0 }] } },
+
+
+
+    {
+      title: "Ikaro",
+      className: '',
+      start: moment().add(21, 'days').format(),
+      end: moment().add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 8,
+        phone: '06126888899',
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 0 },
+        { name: "Gold", count: 0 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Serge",
+      className: '',
+      start: moment().add(21, 'days').format(),
+      end: moment().add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 9,
+        status: 'done',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 5 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Mathéo",
+      className: '',
+      start: moment().add(1, 'days').format(),
+      end: moment().add(1, 'days').add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 10,
+        status: 'todo',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 5 },
+        { name: "Standard", count: 6 }] } },
+
+
+
+    {
+      title: "Loulou",
+      className: '',
+      start: moment().subtract(3, 'days').format(),
+      end: moment().subtract(3, 'days').add(3, 'hours').format(),
+      color: 'white',
+      textColor: 'white',
+      display: 'block',
+      extendedProps: {
+        id: 11,
+        status: 'check-in',
+        categories: [
+        { name: "vip", count: 10 },
+        { name: "Gold", count: 5 },
+        { name: "Standard", count: 6 }] } }] });
+
+
+
+
+
+
+
+  calendar.render();
+});
+//# sourceURL=pen.js
+    </script>
+
+  
+</body>
+
+</html>
